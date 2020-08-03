@@ -1,0 +1,11 @@
+NUTR_DEF
+  - FD_GROUP
+    - FOOD_DES
+      - SRC_CD && DERIV_CD
+        - NUT_DATA
+      - LANGDESC
+        - LANGUAL
+      - DATA_SRC
+        - DATASRCLN
+      - WEIGHT
+      - FOOTNOTE
