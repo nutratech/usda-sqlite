@@ -20,7 +20,7 @@ import sys
 
 # change to script's dir
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-os.makedirs("csv/nt", 0o755, True)
+os.makedirs("nt", 0o755, True)
 
 
 # --------------------
@@ -40,8 +40,9 @@ special_interests_dirs = [
 # --------------------
 # RDAs
 # --------------------
-rdas = {"NUTR_NO": ("rda", "tagname")}
-with open("csv/RDA.csv") as file:
+# rdas = {"NUTR_NO": ("rda", "tagname")}
+rdas = {}
+with open("rda.csv") as file:
     reader = csv.reader(file)
     for row in reader:
         rdas[row[0].upper()] = row[1], row[3]
@@ -99,7 +100,9 @@ def process_nutr_def():
     def process_main(rows):
         result = []
         for row in rows:
-            rda, tagname = rdas[row[0].upper()]
+            id = row[0].upper().replace("NUTR_NO", "ID")
+            row[0] = id.lower()
+            rda, tagname = rdas[id]
             row = row[:4]
             row[2] = tagname
             row.insert(1, rda)
@@ -142,7 +145,7 @@ def process_nutr_def():
     result = []
 
     # Main USDA files
-    main_nutr = "csv/usda/NUTR_DEF.csv"
+    main_nutr = "SR-Leg_DB/NUTR_DEF.csv"
     print(main_nutr)
     with open(main_nutr) as file:
         reader = csv.reader(file)
