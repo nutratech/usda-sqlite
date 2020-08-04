@@ -30,9 +30,7 @@ cd tmp
 # -----------------
 curl -O "https://www.ars.usda.gov/ARSUserFiles/80400525/Data/SR-Legacy/SR-Leg_DB.zip"
 unzip SR-Leg_DB.zip SR_Legacy.accdb
-curl -L "https://www.ars.usda.gov/ARSUserFiles/80400525/Data/Flav/Flav_R03-2.accdb" -o Flav_R03-3.accdb
-curl -L "https://www.ars.usda.gov/ARSUserFiles/80400525/Data/isoflav/Isoflav_R2-1.accdb" -o Isoflav_R2-1.accdb
-curl -L "https://www.ars.usda.gov/ARSUserFiles/80400525/Data/PA/PA02.accdb" -o PA02.accdb
+curl -L "https://www.ars.usda.gov/ARSUserFiles/80400525/Data/Flav/FDB-EXP_R01-1.accdb" -o FDB-EXP_R01-1.accdb
 
 
 # -----------------
@@ -41,52 +39,22 @@ curl -L "https://www.ars.usda.gov/ARSUserFiles/80400525/Data/PA/PA02.accdb" -o P
 # git clone git@github.com:AccelerationNet/access2csv.git
 
 # cd access2csv
-# mvn clean install -Dmaven.test.skip=true
+# mvn clean install -Dmaven.test.skip=true  # handled automatically by command
 cd ../access2csv
-./access2csv --schema --quote-all false --input ../tmp/SR_Legacy.accdb --output ../tmp/usda --with-header
-./access2csv --schema --quote-all false --input ../tmp/Flav_R03-3.accdb --output ../tmp/usda/flav --with-header
-./access2csv --schema --quote-all false --input ../tmp/Isoflav_R2-1.accdb --output ../tmp/usda/isoflav --with-header
-./access2csv --schema --quote-all false --input ../tmp/PA02.accdb --output ../tmp/usda/proanth --with-header
+./access2csv --schema --with-header --quote-all false --input ../tmp/SR_Legacy.accdb --output ../tmp/usda
+./access2csv --schema --with-header --quote-all false --input ../tmp/FDB-EXP_R01-1.accdb --output ../tmp/usda/fdb-exp
 cd ..
 
 
-# -----------------
-# Move to permanent home
-# -----------------
-mkdir -p sr28-csv
-cd sr28-csv
+# --------------------------------------
+# Move to permanent home and clean up
+# --------------------------------------
+rm -rf SR-Leg_DB
+
+mkdir -p SR-Leg_DB
+cd SR-Leg_DB
+
 mv ../tmp/usda/* .
 
-
-# -----------------
-# Clean up
-# -----------------
 rm -rf ../tmp
-# cd usda
-
-# rm DATSRCLN.csv
-# rm LANGUAL.csv
-# rm DATA_SRC.csv
-# rm FOOTNOTE.csv
-# rm LANGDESC.csv
-# rm DERIV_CD.csv
-# rm SRC_CD.csv
-
-cd flav
-# rm DATA_SRC.csv
-# rm DATSRCLN.csv
-# rm FD_GROUP.csv
-# rm FLAV_IND.csv
-mv FLAV_DAT.csv NUT_DATA.csv
-
-cd ../isoflav
-# rm DATA_SRC.csv
-# rm DATSRCLN.csv
-# rm SYBN_DTL.csv
-mv ISFL_DAT.csv NUT_DATA.csv
-
-cd ../proanth
-# rm DATA_SRC.csv
-# rm DATSRCLN.csv
-# rm FD_GROUP.csv
-mv PA_DAT.csv NUT_DATA.csv
+# mv fdb-exp/FLAV_DAT/NUT_DATA.csv
