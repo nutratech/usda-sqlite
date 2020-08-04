@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
-# nutra-db, a database for nutratracker clients
-# Copyright (C) 2020  Nutra, LLC. [Shane & Kyle] <nutratracker@gmail.com>
+# nt-sqlite, an sqlite3 database for nutratracker clients
+# Copyright (C) 2020  Shane Jaroch <mathmuncher11@gmail.com>
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ cd ../isoflav
 # rm DATA_SRC.csv
 # rm DATSRCLN.csv
 # rm SYBN_DTL.csv
-# mv ISFL_DAT.csv NUT_DATA.csv
+mv ISFL_DAT.csv NUT_DATA.csv
 
 cd ../proanth
 # rm DATA_SRC.csv

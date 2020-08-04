@@ -1,5 +1,5 @@
-# nutra-db, a database for nutratracker clients
-# Copyright (C) 2020  Nutra, LLC. [Shane & Kyle] <nutratracker@gmail.com>
+# nt-sqlite, an sqlite3 database for nutratracker clients
+# Copyright (C) 2020  Shane Jaroch <mathmuncher11@gmail.com>
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,10 +16,12 @@
 
 import csv
 import os
+import shutil
 import sys
 
 # change to script's dir
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+shutil.rmtree("nt", True)
 os.makedirs("nt", 0o755, True)
 
 
@@ -28,6 +30,13 @@ os.makedirs("nt", 0o755, True)
 # --------------------
 output_files = {
     "SR-Leg_DB/FD_GROUP.csv": "nt/fdgrp.csv",
+    "SR-Leg_DB/SRC_CD.csv": "nt/src_cd.csv",
+    "SR-Leg_DB/DERIV_CD.csv": "nt/deriv_cd.csv",
+    "SR-Leg_DB/LANGDESC.csv": "nt/lang_desc.csv",
+    "SR-Leg_DB/LANGUAL.csv": "nt/langual.csv",
+    "SR-Leg_DB/DATA_SRC.csv": "nt/data_src.csv",
+    "SR-Leg_DB/DATSRCLN.csv": "nt/datsrcln.csv",
+    "SR-Leg_DB/FOOTNOTE.csv": "nt/footnote.csv",
     "SR-Leg_DB/WEIGHT.csv": None,
 }
 
@@ -62,7 +71,7 @@ def main(args):
     # -----------------
     print("==> Process CSV")
     process_nutr_def()
-    process_nut_data()
+    # process_nut_data()
     process_food_des()
 
     for fname in output_files:
@@ -71,7 +80,7 @@ def main(args):
         with open(fname) as file:
             reader = csv.reader(file)
             rows = list(reader)
-        #
+        #########################
         # Process and write out
         if fname == "SR-Leg_DB/WEIGHT.csv":
             process_weight(rows, fname)
@@ -211,7 +220,7 @@ def process_nut_data():
             for row in rows[1:]:
                 result.append(row[:3])
 
-    #
+    #########################
     # Write out result
     with open("nt/nut_data.csv", "w+") as file:
         writer = csv.writer(file, lineterminator="\n")
@@ -234,16 +243,10 @@ def process_food_des():
         reader = csv.reader(file)
         rows = list(reader)
         # Add to final solution
-        for i, _row in enumerate(rows):
+        for i, row in enumerate(rows):
             if i > 0:
-                food_ids.add(int(_row[0]))
-            row = _row[:10]
-            del row[6]
-            row.insert(2, 1)  # Data src
-            row.append(None)  # user_id
-            row.append(True)  # is_shared
+                food_ids.add(int(row[0]))
             result.append(row)
-            # result.append(row[:3])
 
     # Special interests DB
     for dir in special_interests_dirs:
@@ -261,17 +264,15 @@ def process_food_des():
                     print(f"new food: {food_id} {_row[2]}")
                     food_ids.add(food_id)
                     # Set new row
-                    row = [None] * 12
+                    row = [None] * 14
                     row[0] = food_id
                     row[1] = _row[1]  # Food group
-                    row[2] = 2  # Data src
-                    row[3] = _row[2]  # Long Desc
+                    row[2] = _row[2]  # Long Desc
                     if len(_row) > 3:
-                        row[5] = _row[3]  # Sci name
-                    row[11] = True  # is_shared
+                        row[4] = _row[3]  # Comm/sci name
                     result.append(row)
 
-    #
+    #########################
     # Write out result
     with open("nt/food_des.csv", "w+") as file:
         writer = csv.writer(file, lineterminator="\n")
@@ -288,8 +289,8 @@ def process_weight(rows, fname):
     servings_set = set()
 
     # CSV rows
-    serving_id = [["id", "msre_desc"]]
-    servings = [["food_id", "msre_id", "grams"]]
+    serv_desc = [["id", "msre_desc"]]
+    serving = [["food_id", "msre_id", "grams", "num_data_pts", "std_dev"]]
 
     #
     # Main logic
@@ -303,10 +304,12 @@ def process_weight(rows, fname):
         msre_desc = row[3]
         grams = float(row[4])
         grams /= amount
+        num_data_pts = row[5]
+        std_dev = row[6]
 
         # Get key if used previously
         if msre_desc not in msre_ids:
-            serving_id.append([id, msre_desc])
+            serv_desc.append([id, msre_desc])
             msre_ids[msre_desc] = id
             id += 1
         msre_id = msre_ids[msre_desc]
@@ -316,17 +319,17 @@ def process_weight(rows, fname):
         # DETAIL:  Key (food_id, msre_id)=(1036, 3) already exists.
         prim_key = (food_id, msre_id)
         if prim_key not in servings_set:
-            servings.append([food_id, msre_id, grams])
+            serving.append([food_id, msre_id, grams, num_data_pts, std_dev])
             servings_set.add(prim_key)
 
-    #
-    # Write serving_id and servings tables
-    with open("nt/serving_id.csv", "w+") as file:
+    ##################################################
+    # Write serv_desc and serving tables
+    with open("nt/serv_desc.csv", "w+") as file:
         writer = csv.writer(file, lineterminator="\n")
-        writer.writerows(serving_id)
-    with open("nt/servings.csv", "w+") as file:
+        writer.writerows(serv_desc)
+    with open("nt/serving.csv", "w+") as file:
         writer = csv.writer(file, lineterminator="\n")
-        writer.writerows(servings)
+        writer.writerows(serving)
 
 
 #
