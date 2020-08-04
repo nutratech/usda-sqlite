@@ -60,23 +60,23 @@ CREATE TABLE deriv_cd (
 );
 
 CREATE TABLE nut_data (
-  NDB_No text,
-  Nutr_No text,
-  Nutr_Val double,
-  Num_Data_Pts int,
-  Std_Error double,
-  Src_Cd text,
-  Deriv_Cd text,
-  Ref_NDB_No text,
-  Add_Nutr_Mark text,
-  Num_Studies LONG,
-  Min double,
-  Max double,
-  DF LONG,
-  Low_EB double,
-  Up_EB double,
-  Stat_Cmt text,
-  AddMod_Date text
+  food_id int,
+  nutr_id int,
+  nutr_val float,
+  num_data_pts int,
+  std_err float,
+  src_cd text,
+  reriv_cd text,
+  ref_food_id int,
+  add_nutr_mark text,
+  num_studies int,
+  min float,
+  max float,
+  df LONG,
+  low_eb float,
+  up_eb float,
+  stat_cmt text,
+  add_mod_date date
 );
 
 CREATE TABLE lang_desc (
