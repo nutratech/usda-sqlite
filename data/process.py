@@ -211,8 +211,10 @@ def process_nut_data():
     with open(main_nutr) as file:
         reader = csv.reader(file)
         rows = list(reader)
+        rows[0].append("cc")  # CC, see: Flav_R03-1.pdf
         # Add to final solution
         for row in rows:
+            row.append(None)  # CC, see: Flav_R03-1.pdf
             result.append(row)
 
     # Special interests DB
@@ -224,16 +226,17 @@ def process_nut_data():
             rows = list(reader)
             # Add to final solution
             for row in rows[1:]:
-                _row = None * 17
+                _row = [None] * 18
                 _row[0] = row[0]  # food_id
                 _row[1] = row[1]  # nutr_id
                 _row[2] = row[2]  # nutr_val
                 _row[3] = row[4]  # num_data_pts
                 _row[4] = row[3]  # std_err / std_dev
-                _row[5] = row[8]  # data_src_id
+                if len(row) > 8:
+                    _row[5] = row[8]  # data_src_id
                 _row[10] = row[5]  # min
                 _row[11] = row[6]  # max
-                _row[?] = row[7]  # CC
+                _row[17] = row[7]  # CC
                 result.append(_row)
 
     #########################

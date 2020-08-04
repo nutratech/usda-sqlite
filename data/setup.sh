@@ -41,7 +41,7 @@ curl -L "https://www.ars.usda.gov/ARSUserFiles/80400525/Data/PA/PA02.accdb" -o P
 # git clone git@github.com:AccelerationNet/access2csv.git
 
 # cd access2csv
-# mvn clean install -Dmaven.test.skip=true
+# mvn clean install -Dmaven.test.skip=true  # the install is handled by command
 cd ../access2csv
 ./access2csv --schema --quote-all false --input ../tmp/SR_Legacy.accdb --output ../tmp/usda --with-header
 ./access2csv --schema --quote-all false --input ../tmp/Flav_R03-3.accdb --output ../tmp/usda/flav --with-header
@@ -50,43 +50,24 @@ cd ../access2csv
 cd ..
 
 
-# -----------------
-# Move to permanent home
-# -----------------
-mkdir -p sr28-csv
-cd sr28-csv
+# --------------------------------------
+# Move to permanent home, and clean up
+# --------------------------------------
+rm -rf SR-Leg_DB
+
+mkdir -p SR-Leg_DB
+cd SR-Leg_DB
+
 mv ../tmp/usda/* .
 
-
-# -----------------
 # Clean up
-# -----------------
 rm -rf ../tmp
-# cd usda
-
-# rm DATSRCLN.csv
-# rm LANGUAL.csv
-# rm DATA_SRC.csv
-# rm FOOTNOTE.csv
-# rm LANGDESC.csv
-# rm DERIV_CD.csv
-# rm SRC_CD.csv
 
 cd flav
-# rm DATA_SRC.csv
-# rm DATSRCLN.csv
-# rm FD_GROUP.csv
-# rm FLAV_IND.csv
 mv FLAV_DAT.csv NUT_DATA.csv
 
 cd ../isoflav
-# rm DATA_SRC.csv
-# rm DATSRCLN.csv
-# rm SYBN_DTL.csv
 mv ISFL_DAT.csv NUT_DATA.csv
 
 cd ../proanth
-# rm DATA_SRC.csv
-# rm DATSRCLN.csv
-# rm FD_GROUP.csv
 mv PA_DAT.csv NUT_DATA.csv
