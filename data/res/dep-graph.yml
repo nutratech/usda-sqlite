@@ -1,4 +1,4 @@
-NUTR_DEF
+- NUTR_DEF
   - FD_GROUP
     - FOOD_DES
       - SRC_CD && DERIV_CD

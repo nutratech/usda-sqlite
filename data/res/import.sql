@@ -16,4 +16,5 @@
 .import NUTR_DEF.csv NUTR_DEF
 .import WEIGHT.csv WEIGHT
 
+.headers on
 .mode column

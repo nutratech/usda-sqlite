@@ -27,25 +27,24 @@ os.makedirs("nt", 0o755, True)
 # io dict
 # --------------------
 output_files = {
-    "csv/usda/FD_GROUP.csv": "csv/nt/fdgrp.csv",
-    "csv/usda/WEIGHT.csv": None,
+    "SR-Leg_DB/FD_GROUP.csv": "nt/fdgrp.csv",
+    "SR-Leg_DB/WEIGHT.csv": None,
 }
 
 special_interests_dirs = [
-    "csv/usda/isoflav",
-    "csv/usda/proanth",
-    "csv/usda/flav",
+    "SR-Leg_DB/isoflav",
+    "SR-Leg_DB/proanth",
+    "SR-Leg_DB/flav",
 ]
 
 # --------------------
 # RDAs
 # --------------------
-# rdas = {"NUTR_NO": ("rda", "tagname")}
 rdas = {}
 with open("rda.csv") as file:
-    reader = csv.reader(file)
-    for row in reader:
-        rdas[row[0].upper()] = row[1], row[3]
+    reader = csv.DictReader(file)
+    rdas = list(reader)
+    rdas = {int(x["id"]): x for x in rdas}
 
 
 """
@@ -74,7 +73,7 @@ def main(args):
             rows = list(reader)
         #
         # Process and write out
-        if fname == "csv/usda/WEIGHT.csv":
+        if fname == "SR-Leg_DB/WEIGHT.csv":
             process_weight(rows, fname)
         else:
             process(rows, fname)
@@ -100,47 +99,56 @@ def process_nutr_def():
     def process_main(rows):
         result = []
         for row in rows:
-            id = row[0].upper().replace("NUTR_NO", "ID")
-            row[0] = id.lower()
-            rda, tagname = rdas[id]
-            row = row[:4]
-            row[2] = tagname
-            row.insert(1, rda)
-            row.append(False)  # is_anti
-            row.append(None)  # user_id
-            row.append(True)  # is_shared
+            id = int(row["Nutr_no"])
+
+            # Adjust && Insert
+            row["id"] = row.pop("Nutr_no")
+            row["rda"] = rdas[id]["rda"]
+            row["unit"] = row.pop("Units")
+            row["tagname"] = row.pop("Tagname")
+            row["tagname"] = (
+                rdas[id]["tagname"] if not row["tagname"] else row["tagname"]
+            )
+            row["nutr_desc"] = row.pop("NutrDesc")
+            row["anti_nutrient"] = rdas[id]["anti_nutrient"]
+            row["num_dec"] = row.pop("Num_Dec")
+            row["sr_order"] = row.pop("SR_Order")
+            row["flav_class"] = None
             # Add to list
             result.append(row.copy())
         return result
 
     def process_si(rows):
         result = []
-        # Header indexes
-        h = rows[0]
-        unit_d = ["UNITS", "UNIT"]
-        nutr_d = ["NUTRDESC", "NUTRIENT NAME"]
-        unit_i = h.index(next(x for x in h if x.upper() in unit_d))
-        desc_i = h.index(next(x for x in h if x.upper() in nutr_d))
+        for row in rows:
+            if "Nutr_No" in row:
+                row["Nutr_no"] = row.pop("Nutr_No")
+            if "Units" in row:
+                row["Unit"] = row.pop("Units")
+            if "Nutrient name" in row:
+                row["NutrDesc"] = row.pop("Nutrient name")
+            id = int(row["Nutr_no"])
 
-        # Process rows
-        for _row in rows[1:]:
-            rda, tagname = rdas[_row[0].upper()]
-            nutr_id = _row[0]
-            # Set new row
-            row = [None] * 8
-            row[0] = nutr_id
-            row[1] = rda
-            row[2] = _row[unit_i]
-            row[3] = tagname
-            row[4] = _row[desc_i]
-            row[5] = False  # is_anti
-            row[6] = None  # user_id
-            row[7] = True  # is_shared
+            # Adjust && Insert
+            row["id"] = row.pop("Nutr_no")
+            row["rda"] = rdas[id]["rda"]
+            row["unit"] = row.pop("Unit")
+            row["tagname"] = (
+                row.pop("Tagname") if "Tagname" in row else rdas[id]["tagname"]
+            )
+            row["tagname"] = (
+                rdas[id]["tagname"] if not row["tagname"] else row["tagname"]
+            )
+            row["nutr_desc"] = row.pop("NutrDesc")
+            row["anti_nutrient"] = rdas[id]["anti_nutrient"]
+            row["num_dec"] = row.pop("Num_Dec") if "Num_Dec" in row else None
+            row["sr_order"] = row.pop("SR_Order") if "SR_Order" in row else None
+            row["flav_class"] = row.pop("Flav_Class") if "Flav_Class" in row else None
             # Add to list
             result.append(row)
         return result
 
-    #
+    #########################
     # Prepare the rows
     result = []
 
@@ -148,7 +156,7 @@ def process_nutr_def():
     main_nutr = "SR-Leg_DB/NUTR_DEF.csv"
     print(main_nutr)
     with open(main_nutr) as file:
-        reader = csv.reader(file)
+        reader = csv.DictReader(file)
         rows = list(reader)
         rows = process_main(rows)
         # Add to final solution
@@ -159,16 +167,18 @@ def process_nutr_def():
         sub_nutr = f"{dir}/NUTR_DEF.csv"
         print(sub_nutr)
         with open(sub_nutr) as file:
-            reader = csv.reader(file)
+            reader = csv.DictReader(file)
             rows = list(reader)
             rows = process_si(rows)
             # Add to final solution
             result.extend(rows)
 
-    #
+    #########################
     # Write out result
-    with open(f"csv/nt/nutr_def.csv", "w+") as file:
-        writer = csv.writer(file, lineterminator="\n")
+    with open("nt/nutr_def.csv", "w+") as file:
+        fieldnames = list(result[0].keys())
+        writer = csv.DictWriter(file, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
         writer.writerows(result)
 
 
@@ -181,7 +191,7 @@ def process_nut_data():
     result = []
 
     # Main USDA files
-    main_nutr = "csv/usda/NUT_DATA.csv"
+    main_nutr = "SR-Leg_DB/NUT_DATA.csv"
     print(main_nutr)
     with open(main_nutr) as file:
         reader = csv.reader(file)
@@ -203,7 +213,7 @@ def process_nut_data():
 
     #
     # Write out result
-    with open(f"csv/nt/nut_data.csv", "w+") as file:
+    with open("nt/nut_data.csv", "w+") as file:
         writer = csv.writer(file, lineterminator="\n")
         writer.writerows(result)
 
@@ -218,7 +228,7 @@ def process_food_des():
     food_ids = set()
 
     # Main USDA files
-    main_nutr = "csv/usda/FOOD_DES.csv"
+    main_nutr = "SR-Leg_DB/FOOD_DES.csv"
     print(main_nutr)
     with open(main_nutr) as file:
         reader = csv.reader(file)
@@ -247,7 +257,7 @@ def process_food_des():
                 food_id = int(_row[0])
 
                 # Don't add dupes
-                if not food_id in food_ids:
+                if food_id not in food_ids:
                     print(f"new food: {food_id} {_row[2]}")
                     food_ids.add(food_id)
                     # Set new row
@@ -263,7 +273,7 @@ def process_food_des():
 
     #
     # Write out result
-    with open(f"csv/nt/food_des.csv", "w+") as file:
+    with open("nt/food_des.csv", "w+") as file:
         writer = csv.writer(file, lineterminator="\n")
         writer.writerows(result)
 
@@ -295,7 +305,7 @@ def process_weight(rows, fname):
         grams /= amount
 
         # Get key if used previously
-        if not msre_desc in msre_ids:
+        if msre_desc not in msre_ids:
             serving_id.append([id, msre_desc])
             msre_ids[msre_desc] = id
             id += 1
@@ -305,16 +315,16 @@ def process_weight(rows, fname):
         # ERROR:  duplicate key value violates unique constraint "servings_pkey"
         # DETAIL:  Key (food_id, msre_id)=(1036, 3) already exists.
         prim_key = (food_id, msre_id)
-        if not prim_key in servings_set:
+        if prim_key not in servings_set:
             servings.append([food_id, msre_id, grams])
             servings_set.add(prim_key)
 
     #
     # Write serving_id and servings tables
-    with open("csv/nt/serving_id.csv", "w+") as file:
+    with open("nt/serving_id.csv", "w+") as file:
         writer = csv.writer(file, lineterminator="\n")
         writer.writerows(serving_id)
-    with open("csv/nt/servings.csv", "w+") as file:
+    with open("nt/servings.csv", "w+") as file:
         writer = csv.writer(file, lineterminator="\n")
         writer.writerows(servings)
 
