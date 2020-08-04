@@ -19,6 +19,13 @@ import os
 import shutil
 import sys
 
+# Check Python version
+if sys.version_info < (3, 7, 0):
+    ver = ".".join([str(x) for x in sys.version_info[0:3]])
+    print("ERROR: this requires Python 3.7.0 or later to run")
+    print("HINT: You're running Python " + ver)
+    exit(1)
+
 # change to script's dir
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 shutil.rmtree("nt", True)
@@ -34,8 +41,8 @@ output_files = {
     "SR-Leg_DB/DERIV_CD.csv": "nt/deriv_cd.csv",
     "SR-Leg_DB/LANGDESC.csv": "nt/lang_desc.csv",
     "SR-Leg_DB/LANGUAL.csv": "nt/langual.csv",
-    "SR-Leg_DB/DATA_SRC.csv": "nt/data_src.csv",
-    "SR-Leg_DB/DATSRCLN.csv": "nt/datsrcln.csv",
+    # "SR-Leg_DB/DATA_SRC.csv": "nt/data_src.csv",
+    # "SR-Leg_DB/DATSRCLN.csv": "nt/datsrcln.csv",
     "SR-Leg_DB/FOOTNOTE.csv": "nt/footnote.csv",
     "SR-Leg_DB/WEIGHT.csv": None,
 }
@@ -73,6 +80,7 @@ def main(args):
     process_nutr_def()
     # process_nut_data()
     process_food_des()
+    process_data_srcs()
 
     for fname in output_files:
         print(fname)
@@ -277,6 +285,13 @@ def process_food_des():
     with open("nt/food_des.csv", "w+") as file:
         writer = csv.writer(file, lineterminator="\n")
         writer.writerows(result)
+
+
+# -----------------
+# Data sources
+# -----------------
+def process_data_srcs():
+    pass
 
 
 # -----------------
