@@ -13,8 +13,8 @@
 .import '| tail -n +2 nt/lang_desc.csv' lang_desc
 .import '| tail -n +2 nt/langual.csv' langual
 
--- .import '| tail -n +2 nt/data_src.csv' data_src
--- .import '| tail -n +2 nt/datsrcln.csv' datsrcln
+.import '| tail -n +2 nt/data_src.csv' data_src
+.import '| tail -n +2 nt/datsrcln.csv' datsrcln
 
 .import '| tail -n +2 nt/serv_desc.csv' serv_desc
 .import '| tail -n +2 nt/serving.csv' serving

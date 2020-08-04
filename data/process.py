@@ -41,8 +41,6 @@ output_files = {
     "SR-Leg_DB/DERIV_CD.csv": "nt/deriv_cd.csv",
     "SR-Leg_DB/LANGDESC.csv": "nt/lang_desc.csv",
     "SR-Leg_DB/LANGUAL.csv": "nt/langual.csv",
-    # "SR-Leg_DB/DATA_SRC.csv": "nt/data_src.csv",
-    # "SR-Leg_DB/DATSRCLN.csv": "nt/datsrcln.csv",
     "SR-Leg_DB/FOOTNOTE.csv": "nt/footnote.csv",
     "SR-Leg_DB/WEIGHT.csv": None,
 }
@@ -78,9 +76,9 @@ def main(args):
     # -----------------
     print("==> Process CSV")
     process_nutr_def()
-    # process_nut_data()
     process_food_des()
     process_data_srcs()
+    # process_nut_data()
 
     for fname in output_files:
         print(fname)
@@ -291,7 +289,63 @@ def process_food_des():
 # Data sources
 # -----------------
 def process_data_srcs():
-    pass
+    #
+    # Prepare the rows
+    data_src = []
+    datsrcln = []
+
+    # Main USDA files
+    main_data_src = "SR-Leg_DB/DATA_SRC.csv"
+    main_datsrcln = "SR-Leg_DB/DATSRCLN.csv"
+    print(main_data_src)
+    print(main_datsrcln)
+    with open(main_data_src) as file_src, open(main_datsrcln) as file_ln:
+        reader_src = csv.reader(file_src)
+        data_src_rows = list(reader_src)
+        reader_ln = csv.reader(file_ln)
+        datsrcln_rows = list(reader_ln)
+
+        # Add to final solution
+        for row in data_src_rows:
+            data_src.append(row)
+        for row in datsrcln_rows:
+            datsrcln.append(row)
+
+    # Special interests DB
+    for dir in special_interests_dirs:
+        # DATA_SRC.csv
+        sub_nutr = f"{dir}/DATA_SRC.csv"
+        print(sub_nutr)
+        with open(sub_nutr) as file:
+            reader = csv.reader(file)
+            rows = list(reader)
+            # Add to final solution
+            for _row in rows[1:]:
+                # Special rules
+                if sub_nutr == "SR-Leg_DB/isoflav/DATA_SRC.csv":
+                    _row.insert(0, _row.pop())  # isoflav has DataSrc_ID at end
+                    _row.insert(6, None)  # Issue_State
+                # Add to final solution
+                data_src.append(_row)
+
+        # DATASRCLN.csv
+        sub_nutr = f"{dir}/DATSRCLN.csv"
+        print(sub_nutr)
+        with open(sub_nutr) as file:
+            reader = csv.reader(file)
+            rows = list(reader)
+            # Add to final solution
+            for _row in rows[1:]:
+                datsrcln.append(_row)
+
+    ##################################################
+    # Write serv_desc and serving tables
+    with open("nt/data_src.csv", "w+") as file:
+        writer = csv.writer(file, lineterminator="\n")
+        writer.writerows(data_src)
+    with open("nt/datsrcln.csv", "w+") as file:
+        writer = csv.writer(file, lineterminator="\n")
+        writer.writerows(datsrcln)
 
 
 # -----------------
