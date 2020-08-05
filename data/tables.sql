@@ -33,8 +33,8 @@ CREATE TABLE fdgrp (
 
 CREATE TABLE food_des (
   id integer PRIMARY KEY AUTOINCREMENT,
-  fdgrp_id int,
-  long_desc text,
+  fdgrp_id int NOT NULL,
+  long_desc text NOT NULL,
   shrt_desc text,
   com_name text,
   manufac_name text,
@@ -60,9 +60,9 @@ CREATE TABLE deriv_cd (
 );
 
 CREATE TABLE nut_data (
-  food_id int,
-  nutr_id int,
-  nutr_val float,
+  food_id int NOT NULL,
+  nutr_id int NOT NULL,
+  nutr_val float NOT NULL,
   num_data_pts int,
   std_err float,
   src_cd text,
@@ -76,7 +76,8 @@ CREATE TABLE nut_data (
   low_eb float,
   up_eb float,
   stat_cmt text,
-  add_mod_date date
+  add_mod_date date,
+  cc text
 );
 
 CREATE TABLE lang_desc (

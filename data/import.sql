@@ -7,7 +7,7 @@
 
 .import '| tail -n +2 nt/src_cd.csv' src_cd
 .import '| tail -n +2 nt/deriv_cd.csv' deriv_cd
--- .import '| tail -n +2 nt/nut_data.csv' nut_data
+.import '| tail -n +2 nt/nut_data.csv' nut_data
 
 
 .import '| tail -n +2 nt/lang_desc.csv' lang_desc
