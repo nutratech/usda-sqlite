@@ -66,7 +66,7 @@ CREATE TABLE nut_data (
   num_data_pts int,
   std_err float,
   src_cd text,
-  reriv_cd text,
+  deriv_cd text,
   ref_food_id int,
   add_nutr_mark text,
   num_studies int,
@@ -77,7 +77,11 @@ CREATE TABLE nut_data (
   up_eb float,
   stat_cmt text,
   add_mod_date date,
-  cc text
+  cc text,
+  FOREIGN KEY (food_id) REFERENCES food_des (id),
+  FOREIGN KEY (nutr_id) REFERENCES nutr_def (id),
+  FOREIGN KEY (src_cd) REFERENCES src_cd (id),
+  FOREIGN KEY (deriv_cd) REFERENCES deriv_cd (id)
 );
 
 CREATE TABLE lang_desc (
@@ -133,7 +137,8 @@ CREATE TABLE serving (
   msre_id int NOT NULL,
   grams float NOT NULL,
   num_data_pts int,
-  st_dev float,
+  std_dev float,
+  FOREIGN KEY (food_id) REFERENCES food_des (id),
   FOREIGN KEY (msre_id) REFERENCES serv_desc (id)
 );
 

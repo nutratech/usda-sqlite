@@ -1,9 +1,6 @@
-**********
- nutra-db
-**********
-
-.. image:: https://api.travis-ci.com/gamesguru/ntdb.svg?branch=master
-    :target: https://travis-ci.com/gamesguru/ntdb
+************
+ nt-sqlite3
+************
 
 Python, SQL and CSV files for setting up portable SQL database.
 
@@ -31,7 +28,7 @@ Building the database
 Tables (Relational Design)
 ##########################
 
-See :code:`sql/tables.sql` for details.
+See :code:`data/tables.sql` for details.
 
 This is frequently updated, see :code:`docs/` for more info.
 
