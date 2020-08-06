@@ -49,8 +49,8 @@ CREATE TABLE food_des (
   refuse int,
   sci_name text,
   n_factor FLOAT,
-  pro_factor_ FLOAT,
-  fat_factor_ FLOAT,
+  pro_factor FLOAT,
+  fat_factor FLOAT,
   cho_factor FLOAT,
   FOREIGN KEY (fdgrp_id) REFERENCES fdgrp (id)
 );
