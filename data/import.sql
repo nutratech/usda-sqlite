@@ -1,5 +1,7 @@
 .mode csv
 
+.import '| tail -n +2 nt_ver.csv' nt_ver
+
 .import '| tail -n +2 nt/nutr_def.csv' nutr_def
 .import '| tail -n +2 nt/fdgrp.csv' fdgrp
 .import '| tail -n +2 nt/food_des.csv' food_des
