@@ -2,6 +2,6 @@
 
 # cd to script's directory
 cd "$(dirname "$0")"
-cd ../data
+cd ../sql
 
 sqleton -o ../docs/nutra.svg nutra.db

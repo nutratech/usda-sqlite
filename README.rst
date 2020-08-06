@@ -22,7 +22,14 @@ Building the database
     bash setup.sh
     python3 process.py
 
-3. Create the database with :code:`sqlite3 nutra.db`, AND FOLLOW STEP 4 FROM INSIDE THE SQL SHELL
+3. Create the database with
+
+.. code-block:: bash
+
+    cd ../sql
+    sqlite3 nutra.db
+
+NOTE: FOLLOW STEP 4 FROM INSIDE THE SQL SHELL
 
 4. Create the tables, import the data, and save:
 
