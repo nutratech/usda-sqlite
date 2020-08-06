@@ -11,11 +11,18 @@ Pypi page:  https://pypi.org/project/nutra
 Building the database
 #########################
 
-1. Inside ``/data`` folder, run :code:`bash setup.sh`
+1. Install ``access2csv`` dependency, :code:`git submodule update --init`
 
-2. Now run :code:`python3 process.py`
 
-3. Create the database with :code:`sqlite3 nutra.db`
+2. Download database and process into CSV files,
+
+.. code-block:: bash
+
+    cd data
+    bash setup.sh
+    python3 process.py
+
+3. Create the database with :code:`sqlite3 nutra.db`, AND FOLLOW STEP 4 FROM INSIDE THE SQL SHELL
 
 4. Create the tables, import the data, and save:
 
