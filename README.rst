@@ -22,22 +22,46 @@ Building the database
     bash setup.sh
     python3 process.py
 
-3. Create the database with
+3. If you are committing changes, add a line to :code:`nt_ver.csv``, e.g. :code:`id=3` is new
+
++-----+----------+-----------------------------------+
+| id  | version  | created                           |
++=====+==========+===================================+
+| 1   | 0.0.0    | Wed 05 Aug 2020 07:09:35 PM EDT   |
++-----+----------+-----------------------------------+
+| 2   | 0.0.1    | Wed 05 Aug 2020 08:14:52 PM EDT   |
++-----+----------+-----------------------------------+
+| 3   | 0.0.2    | Thu 06 Aug 2020 09:21:39 AM EDT   |
++-----+----------+-----------------------------------+
+
+4. Create the database with
 
 .. code-block:: bash
 
     cd ../sql
     sqlite3 nutra.db
 
-NOTE: FOLLOW STEP 4 FROM INSIDE THE SQL SHELL
+NOTE: FOLLOW STEP 5 FROM INSIDE THE SQL SHELL
 
-4. Create the tables, import the data, and save:
+5. Create the tables, import the data, and save:
 
-.. code-block:: bash
+.. code-block:: sql
 
     .read tables.sql
     .read import.sql
     .exit
+
+6. Verify the tables, again inside :code:`sqlite nutra.db`,
+
+.. code-block:: sql
+
+    .tables
+    SELECT * FROM nutr_def WHERE id=328;
+    SELECT long_desc FROM food_des WHERE id=9050;
+    SELECT * FROM nt_ver;
+    .exit
+
+7. If everything looks good, compress into :code:`nutra-X.X.X.db.tar.xz` and upload to binary host.
 
 Tables (Relational Design)
 ##########################
