@@ -38,8 +38,8 @@ curl -L "https://www.ars.usda.gov/ARSUserFiles/80400525/Data/PA/PA02.accdb" -o P
 # -----------------
 # Run access2csv
 # -----------------
+# git submodule update --init
 # git clone git@github.com:AccelerationNet/access2csv.git
-
 # cd access2csv
 # mvn clean install -Dmaven.test.skip=true  # the install is handled by command
 cd ../access2csv
