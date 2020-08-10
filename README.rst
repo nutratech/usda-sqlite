@@ -56,6 +56,12 @@ NOTE: FOLLOW STEPS 5 and 6 FROM INSIDE THE SQL SHELL
     .read import.sql
     .exit
 
+Or alternatively from the bash shell (outside SQL)
+
+.. code-block:: bash
+
+    sqlite3 nutra.db -init init.sql
+
 6. Verify the tables (again inside the SQL shell :code:`sqlite nutra.db`),
 
 .. code-block:: sql

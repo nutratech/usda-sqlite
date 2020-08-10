@@ -1,0 +1,10 @@
+dist: xenial
+sudo: true
+language: python
+python:
+- '3.6'
+script:
+- git submodule update --init
+- bash data/setup.sh
+- python data/process.py
+- cd sql && sqlite3 nutra.db ".read init.sql"
