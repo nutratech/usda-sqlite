@@ -2,6 +2,9 @@
  nt-sqlite
 ***********
 
+.. image:: https://api.travis-ci.com/nutratech/nt-sqlite.svg?branch=master
+    :target: https://travis-ci.com/github/nutratech/nt-sqlite
+
 Python, SQL and CSV files for setting up portable SQL database.
 
 See CLI:    https://github.com/nutratech/cli
