@@ -3,8 +3,12 @@ sudo: true
 language: python
 python:
 - '3.6'
+git:
+  submodules: false
+before_install:
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init
 script:
-- git submodule update --init
-- bash data/setup.sh
-- python data/process.py
-- cd sql && sqlite3 nutra.db ".read init.sql"
+  - bash data/setup.sh
+  - python data/process.py
+  - cd sql && sqlite3 nutra.db ".read init.sql"
