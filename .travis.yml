@@ -6,9 +6,12 @@ python:
 git:
   submodules: false
 before_install:
-  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-  - git submodule update --init
+- sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+- git submodule update --init
 script:
-  - bash data/setup.sh
-  - python data/process.py
-  - cd sql && sqlite3 nutra.db ".read init.sql"
+- bash data/setup.sh
+- python data/process.py
+- cd sql && sqlite3 nutra.db ".read init.sql"
+notifications:
+  slack:
+    secure: 2DgOYfM3KMTlztHuYrSJsaRMX/QFoAbdNO99W11gTVLEPUjRN9lV7eeGZ7BNKhjZhlKo+Ie27gbuKCg6Yg+aQj+Qji8xpeE8/iU7k2U0XRJil4tAQ5foHXW++eeK0qupWLbzJR94oKgtPrRpadqguZlbYegmyoY/XZhvKpD2NWfvNjr8ppKXanQK+7zkjFpoQFbP5bBHCqafm02SEhxHzb+ddIoxTMzojzL0JzglhdkihSM+cQigjg7v3kZfV7oYJOXB5rm5sxKdVAc8FQX/5mKM+lM4euVJci5y6ZT3DaQO2JSgYV94kUg7cXvAbmcfHinz+ffWzIyuz9AFeOTSV2gd1dqGshLYmpkRVvCW8LsOdAV6ydc7+8PljFZRrynDYCE9IXz5/xLbAB8NPfOXR1z+nrihm+hwT+qg9XxSnQzp3oKBjjHdHYWho69d1QPC1vu130yT9DUXNw4iqtANF+rbnLfOuNXBdtDENW30+6ScWHrCQx8kklEftgXDv5Wz+kwhkLZLDAmvqcoA/KvfDhx1FkxzUbB0B5cTuIBy75OdM5Fgy9VuM6CL9pWD+W/TLEGaxQ13AdvzpH4NvqTSjese2RMIoN1r1HWPsE9bmoWf6cx1zMilFg1/2Kemr5pVIJlM8Fyqzw4Y0hc3qG04jJsrY7BdnW3gOrHofGKraok=
