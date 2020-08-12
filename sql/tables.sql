@@ -14,7 +14,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-CREATE TABLE nt_ver (
+CREATE TABLE version (
   id integer PRIMARY KEY AUTOINCREMENT,
   version text NOT NULL,
   created timestamp DEFAULT CURRENT_TIMESTAMP

@@ -16,7 +16,7 @@
 
 .mode csv
 
-.import '| tail -n +2 nt_ver.csv' nt_ver
+.import '| tail -n +2 version.csv' version
 
 .import '| tail -n +2 ../data/nt/nutr_def.csv' nutr_def
 .import '| tail -n +2 ../data/nt/fdgrp.csv' fdgrp
