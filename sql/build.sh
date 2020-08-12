@@ -28,8 +28,8 @@ printf "\\n\e[1;31m${tar_cmd}\e[0m\\n"
 $tar_cmd
 
 # Clean up
-printf "\\n\e[1;31m${rm_cmd}\e[0m\\n"
-$rm_cmd
+# printf "\\n\e[1;31m${rm_cmd}\e[0m\\n"
+# $rm_cmd
 
 mv_cmd="mv nutra-$VERSION.db.tar.xz dist"
 printf "\\n\e[1;31m${mv_cmd}\e[0m\\n\n"

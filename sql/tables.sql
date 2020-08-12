@@ -14,10 +14,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-CREATE TABLE version (
-  id integer PRIMARY KEY AUTOINCREMENT,
-  version text NOT NULL,
-  created timestamp DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE version( id integer PRIMARY KEY AUTOINCREMENT, version text NOT NULL, created timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE nutr_def (

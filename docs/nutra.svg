@@ -10,11 +10,11 @@
 <title>undefined</title>
 <polygon fill="white" stroke="transparent" points="-28.8,49.8 -28.8,-1465.8 977.8,-1465.8 977.8,49.8 -28.8,49.8"/>
 <text text-anchor="start" x="445.5" y="12.6" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="12.00">nutra.db</text>
-<!-- nt_ver -->
+<!-- version -->
 <g id="node1" class="node">
-<title>nt_ver</title>
+<title>version</title>
 <path fill="none" stroke="black" d="M815.24,-730.14C815.24,-730.14 935.24,-730.14 935.24,-730.14 941.24,-730.14 947.24,-736.14 947.24,-742.14 947.24,-742.14 947.24,-805.14 947.24,-805.14 947.24,-811.14 941.24,-817.14 935.24,-817.14 935.24,-817.14 815.24,-817.14 815.24,-817.14 809.24,-817.14 803.24,-811.14 803.24,-805.14 803.24,-805.14 803.24,-742.14 803.24,-742.14 803.24,-736.14 809.24,-730.14 815.24,-730.14"/>
-<text text-anchor="start" x="852.24" y="-796.74" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="13.00">nt_ver</text>
+<text text-anchor="start" x="848.24" y="-796.74" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="13.00">version</text>
 <polyline fill="none" stroke="black" points="803.24,-787.14 947.24,-787.14 "/>
 <text text-anchor="start" x="810.24" y="-773.04" font-family="Helvetica,sans-Serif" font-size="12.00">id* </text>
 <text text-anchor="start" x="831.24" y="-773.04" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="12.00">integer</text>
