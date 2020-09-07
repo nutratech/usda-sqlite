@@ -125,7 +125,7 @@ def process_nutr_def():
                 rdas[id]["tagname"] if not row["tagname"] else row["tagname"]
             )
             row["nutr_desc"] = row.pop("NutrDesc")
-            row["anti_nutrient"] = rdas[id]["anti_nutrient"]
+            # row["anti_nutrient"] = rdas[id]["anti_nutrient"]
             row["num_dec"] = row.pop("Num_Dec")
             row["sr_order"] = row.pop("SR_Order")
             row["flav_class"] = None
@@ -155,7 +155,7 @@ def process_nutr_def():
                 rdas[id]["tagname"] if not row["tagname"] else row["tagname"]
             )
             row["nutr_desc"] = row.pop("NutrDesc")
-            row["anti_nutrient"] = rdas[id]["anti_nutrient"]
+            # row["anti_nutrient"] = rdas[id]["anti_nutrient"]
             row["num_dec"] = row.pop("Num_Dec") if "Num_Dec" in row else None
             row["sr_order"] = row.pop("SR_Order") if "SR_Order" in row else None
             row["flav_class"] = row.pop("Flav_Class") if "Flav_Class" in row else None

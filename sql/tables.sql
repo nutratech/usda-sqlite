@@ -23,7 +23,6 @@ CREATE TABLE nutr_def (
   unit text NOT NULL,
   tagname text,
   nutr_desc text,
-  anti_nutrient boolean,
   num_dec int,
   sr_order int,
   flav_class text
