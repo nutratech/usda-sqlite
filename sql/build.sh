@@ -14,7 +14,7 @@ rm_cmd="rm -f nutra.db"
 printf "\\n\e[1;31m${rm_cmd}\e[0m\\n\n"
 $rm_cmd
 
-pack_msg="==> Pack nutra-$VERSION.db"
+pack_msg="==> Pack nutra.db-$VERSION"
 printf "\\n\\x1b[32m${pack_msg}\x1b[0m\n\n"
 
 # Create SQL file
@@ -23,7 +23,7 @@ printf "\\n\e[1;31m${pack_cmd}\e[0m\\n"
 bash -exec "$pack_cmd"
 
 # Compress xzip
-tar_cmd="tar cJvf nutra-$VERSION.db.tar.xz nutra.db"
+tar_cmd="tar cJvf nutra.db-$VERSION.tar.xz nutra.db"
 printf "\\n\e[1;31m${tar_cmd}\e[0m\\n"
 $tar_cmd
 
@@ -31,6 +31,6 @@ $tar_cmd
 # printf "\\n\e[1;31m${rm_cmd}\e[0m\\n"
 # $rm_cmd
 
-mv_cmd="mv nutra-$VERSION.db.tar.xz dist"
+mv_cmd="mv nutra.db-$VERSION.tar.xz dist"
 printf "\\n\e[1;31m${mv_cmd}\e[0m\\n\n"
 $mv_cmd
