@@ -1,0 +1,7 @@
+/access2csv.jar
+/bin
+/target/
+.classpath
+.settings
+.project
+/data

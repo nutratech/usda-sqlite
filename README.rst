@@ -12,7 +12,7 @@ See CLI:    https://github.com/nutratech/cli
 Pypi page:  https://pypi.org/project/nutra
 
 
-Building the database
+Building USDA database
 #########################
 
 1. Install ``access2csv`` dependency,
@@ -26,7 +26,7 @@ Building the database
 
 .. code-block:: bash
 
-    cd data
+    cd usda/data
     bash setup.sh
     python3 process.py
 
@@ -46,8 +46,8 @@ Building the database
 
 .. code-block:: bash
 
-    cd ../sql
-    sqlite3 nutra.db
+    cd ..
+    sqlite3 usda.db
 
 NOTE: FOLLOW STEPS 5 and 6 FROM INSIDE THE SQL SHELL
 
@@ -63,9 +63,9 @@ Or alternatively from the bash shell (outside SQL)
 
 .. code-block:: bash
 
-    sqlite3 nutra.db -init init.sql
+    sqlite3 usda.db -init init.sql
 
-6. Verify the tables (again inside the SQL shell :code:`sqlite nutra.db`),
+6. Verify the tables (again inside the SQL shell :code:`sqlite usda.db`),
 
 .. code-block:: sql
 
@@ -75,14 +75,14 @@ Or alternatively from the bash shell (outside SQL)
     SELECT * FROM nt_ver;
     .exit
 
-7. If everything looks good, compress into :code:`nutra-X.X.X.db.tar.xz` and upload to binary host.
+7. If everything looks good, compress into :code:`usda-X.X.X.db.tar.xz` and upload to binary host.
 
 
 Tables (Relational Design)
 ##########################
 
-See :code:`sql/tables.sql` for details.
+See :code:`usda/sql/tables.sql` and :code:`nt/*/sql/tables.sql` for details.
 
 This is frequently updated, see :code:`docs/` for more info.
 
-.. image:: docs/nutra.svg
+.. image:: docs/usda.svg
