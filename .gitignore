@@ -12,8 +12,9 @@
 .env*
 *.swp
 
-# Database folder and logfile
+# Database files, csv, intermediates
 *.db
+*.sqlite
 *.csv
 tmp/
 
