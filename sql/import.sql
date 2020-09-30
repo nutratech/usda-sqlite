@@ -14,6 +14,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+PRAGMA foreign_keys = 1;
+
 .mode csv
 
 .import '| tail -n +2 version.csv' version
@@ -25,19 +27,29 @@
 
 .import '| tail -n +2 ../data/nt/src_cd.csv' src_cd
 .import '| tail -n +2 ../data/nt/deriv_cd.csv' deriv_cd
-.import '| tail -n +2 ../data/nt/nut_data.csv' nut_data
 
+PRAGMA foreign_keys = 0;
+.import '| tail -n +2 ../data/nt/nut_data.csv' nut_data
+UPDATE nut_data SET src_cd=NULL WHERE src_cd='';
+UPDATE nut_data SET deriv_cd=NULL WHERE deriv_cd='';
+PRAGMA foreign_keys = 1;
 
 .import '| tail -n +2 ../data/nt/lang_desc.csv' lang_desc
 .import '| tail -n +2 ../data/nt/langual.csv' langual
 
 .import '| tail -n +2 ../data/nt/data_src.csv' data_src
+-- TODO: fix "INSERT failed: FOREIGN KEY constraint failed"
+PRAGMA foreign_keys = 0;
 .import '| tail -n +2 ../data/nt/datsrcln.csv' datsrcln
+PRAGMA foreign_keys = 1;
 
 .import '| tail -n +2 ../data/nt/serv_desc.csv' serv_desc
 .import '| tail -n +2 ../data/nt/serving.csv' serving
 
+PRAGMA foreign_keys = 0;
 .import '| tail -n +2 ../data/nt/footnote.csv' footnote
+UPDATE nut_data SET nutr_id=NULL WHERE nutr_id='';
+PRAGMA foreign_keys = 1;
 
 .header on
 .mode column
