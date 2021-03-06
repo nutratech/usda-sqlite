@@ -1,4 +1,4 @@
-# Saves time intensive query in new table
+-- Saves time intensive query in new table
 CREATE TABLE nutrients_overview AS
 SELECT
   id,
