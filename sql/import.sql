@@ -39,9 +39,9 @@ PRAGMA foreign_keys = 1;
 
 .import '| tail -n +2 ../data/nt/data_src.csv' data_src
 -- TODO: fix "INSERT failed: FOREIGN KEY constraint failed"
--- PRAGMA foreign_keys = 0;
+PRAGMA foreign_keys = 0;
 .import '| tail -n +2 ../data/nt/datsrcln.csv' datsrcln
--- PRAGMA foreign_keys = 1;
+PRAGMA foreign_keys = 1;
 
 .import '| tail -n +2 ../data/nt/serv_desc.csv' serv_desc
 .import '| tail -n +2 ../data/nt/serving.csv' serving
