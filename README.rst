@@ -5,7 +5,7 @@
 .. image:: https://api.travis-ci.com/nutratech/usda-sqlite.svg?branch=master
     :target: https://travis-ci.com/github/nutratech/usda-sqlite
 
-Python, SQL and CSV files for setting up portable SQL database.
+Python, SQL and CSV files for setting up portable usda-sqlite database.
 
 See CLI:    https://github.com/nutratech/cli
 
@@ -30,7 +30,7 @@ Building the database
     bash setup.sh
     python3 process.py
 
-3. If you are committing database changes, add a line to :code:`sql/version.csv` (e.g. :code:`id=3` is the latested in this case),
+3. If you are committing database changes, add a line to :code:`sql/version.csv` (e.g. :code:`id=3` is the latest in this case),
 
 +-----+----------+-----------------------------------+
 | id  | version  | created                           |
@@ -50,7 +50,7 @@ Building the database
     ./build.sh
 
 
-5. Verify the tables (again inside the SQL shell :code:`sqlite nutra.db`),
+5. Verify the tables (again inside the SQL shell :code:`sqlite3 usda.sqlite`),
 
 .. code-block:: sql
 
@@ -70,4 +70,4 @@ See :code:`sql/tables.sql` for details.
 
 This is frequently updated, see :code:`docs/` for more info.
 
-.. image:: docs/nutra.svg
+.. image:: docs/usda.svg
