@@ -1,9 +1,9 @@
 ***********
- nt-sqlite
+ usda-sqlite
 ***********
 
-.. image:: https://api.travis-ci.com/nutratech/nt-sqlite.svg?branch=master
-    :target: https://travis-ci.com/github/nutratech/nt-sqlite
+.. image:: https://api.travis-ci.com/nutratech/usda-sqlite.svg?branch=master
+    :target: https://travis-ci.com/github/nutratech/usda-sqlite
 
 Python, SQL and CSV files for setting up portable SQL database.
 
@@ -22,7 +22,7 @@ Building the database
     git submodule update --init
 
 
-2. Download database and process into CSV files,
+2. Download government USDA databases and process into CSV files,
 
 .. code-block:: bash
 
@@ -30,7 +30,7 @@ Building the database
     bash setup.sh
     python3 process.py
 
-3. If you are committing database changes, add a line to :code:`nt_ver.csv` (e.g. :code:`id=3` is new),
+3. If you are committing database changes, add a line to :code:`sql/version.csv` (e.g. :code:`id=3` is the latested in this case),
 
 +-----+----------+-----------------------------------+
 | id  | version  | created                           |
@@ -47,35 +47,20 @@ Building the database
 .. code-block:: bash
 
     cd ../sql
-    sqlite3 nutra.db
+    ./build.sh
 
-NOTE: FOLLOW STEPS 5 and 6 FROM INSIDE THE SQL SHELL
 
-5. Create the tables, import the data, and save:
-
-.. code-block:: sql
-
-    .read tables.sql
-    .read import.sql
-    .exit
-
-Or alternatively from the bash shell (outside SQL)
-
-.. code-block:: bash
-
-    sqlite3 nutra.db -init init.sql
-
-6. Verify the tables (again inside the SQL shell :code:`sqlite nutra.db`),
+5. Verify the tables (again inside the SQL shell :code:`sqlite nutra.db`),
 
 .. code-block:: sql
 
     .tables
     SELECT * FROM nutr_def WHERE id=328;
     SELECT long_desc FROM food_des WHERE id=9050;
-    SELECT * FROM nt_ver;
+    SELECT * FROM version;
     .exit
 
-7. If everything looks good, compress into :code:`nutra-X.X.X.db.tar.xz` and upload to binary host.
+6. If everything looks good, upload compressed :code:`dist/nutra-X.X.X.db.tar.xz` file to binary host (bitbucket files).
 
 
 Tables (Relational Design)
