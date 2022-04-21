@@ -15,7 +15,7 @@ Pypi page:  https://pypi.org/project/nutra
 Building the database
 #########################
 
-1. Install ``access2csv`` dependency,
+1. Install ``access2csv`` dependency (requires ``mvn`` command in step 2),
 
 .. code-block:: bash
 
@@ -42,12 +42,20 @@ Building the database
 | 3   | 0.0.2    | Thu 06 Aug 2020 09:21:39 AM EDT   |
 +-----+----------+-----------------------------------+
 
-4. Create the database with
+4. i. (Optional) Enforce foreign keys with your ``~/.sqliterc`` file,
+
+::
+
+    .headers on
+    .mode column
+    PRAGMA foreign_keys = 1;
+
+4. ii. Create the database with
 
 .. code-block:: bash
 
     cd ../sql
-    ./build.sh
+    ./build.sh X.X.X  # e.g. 0.0.8
 
 
 5. Verify the tables (again inside the SQL shell :code:`sqlite3 usda.sqlite`),

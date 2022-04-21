@@ -1,36 +1,28 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 VERSION=$1
-if [[ $VERSION == '' ]]
+if [ -z $VERSION ]
 then
-    echo Error: NEED TO SPECIFY VERSION, e.g. 0.0.3
+    echo Error: NEED TO SPECIFY VERSION, e.g. build.sh 0.0.3
     exit
 fi
 
 cd "$(dirname "$0")"
-# printf "\\n\e[1;31m\e[0m\\n"
+# lives in sql/
 
-rm_cmd="rm -f usda.sqlite"
-printf "\\n\e[1;31m${rm_cmd}\e[0m\\n\n"
-$rm_cmd
+# Remove existing
+rm -f usda.sqlite
 
-pack_msg="==> Pack usda.sqlite-$VERSION"
-printf "\\n\\x1b[32m${pack_msg}\x1b[0m\n\n"
+printf "\\n\\x1b[32m%s\x1b[0m\n\n" "==> Pack usda.sqlite v$VERSION"
 
-# Create SQL file
-pack_cmd="sqlite3 usda.sqlite \".read init.sql\""
-printf "\\n\e[1;31m${pack_cmd}\e[0m\\n"
-bash -exec "$pack_cmd"
+# Create sqlite db
+sqlite3 usda.sqlite ".read init.sql"
 
 # Compress xzip
-tar_cmd="tar cJvf usda.sqlite-$VERSION.tar.xz usda.sqlite"
-printf "\\n\e[1;31m${tar_cmd}\e[0m\\n"
-$tar_cmd
+tar cJf usda.sqlite-$VERSION.tar.xz usda.sqlite
 
 # Clean up
-# printf "\\n\e[1;31m${rm_cmd}\e[0m\\n"
-# $rm_cmd
-
-mv_cmd="mv usda.sqlite-$VERSION.tar.xz dist"
-printf "\\n\e[1;31m${mv_cmd}\e[0m\\n\n"
-$mv_cmd
+# rm ???
+# overwrite existing?
+mkdir -p dist
+mv usda.sqlite-$VERSION.tar.xz dist
