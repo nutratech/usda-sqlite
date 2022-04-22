@@ -7,9 +7,9 @@
 
 Python, SQL and CSV files for setting up portable usda-sqlite database.
 
-See CLI:    https://github.com/nutratech/cli
+See CLI:        https://github.com/nutratech/cli
 
-Pypi page:  https://pypi.org/project/nutra
+See nt-sqlite:  https://github.com/nutratech/nt-sqlite
 
 
 Building the database
