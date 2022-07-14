@@ -18,6 +18,10 @@
 *.csv
 tmp/
 
+# IDE files
+.idea/
+.vscode/
+
 ####################
 ## Python Ignores ##
 ####################
