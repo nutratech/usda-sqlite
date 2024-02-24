@@ -1,3 +1,5 @@
+-- NOTE: need to first run: fetch.sh
+.load ./extensions/stats
 -- Saves time intensive query in new table
 CREATE TABLE nutrients_overview AS
 SELECT
@@ -6,8 +8,9 @@ SELECT
   unit,
   tagname,
   nutr_desc,
-  COUNT(nut_data.nutr_id) AS n_foods,
-  ROUND(avg(nut_data.nutr_val), 3) AS avg_val
+  CAST(COUNT(nut_data.nutr_id) AS INTEGER) AS n_foods,
+  CAST(ROUND(avg(nut_data.nutr_val), 3) AS real) AS avg_val,
+  CAST(ROUND(stddev(nut_data.nutr_val), 2) AS real) AS std_dev
 FROM
   nutr_def
   INNER JOIN nut_data ON nut_data.nutr_id = id
