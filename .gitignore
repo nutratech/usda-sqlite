@@ -11,12 +11,17 @@
 # Our files
 .env*
 *.swp
+*.so
 
 # Database files, csv, intermediates
 *.db
 *.sqlite
 *.csv
 tmp/
+
+# IDE files
+.idea/
+.vscode/
 
 ####################
 ## Python Ignores ##

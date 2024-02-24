@@ -34,7 +34,7 @@ id,rda,units,tagname,nutr_desc,anti_nutrient,weight
 320,900,µg,VITA_RAE,"Vitamin A, RAE",,
 321,,µg,CARTB,"Carotene, beta",,
 322,,µg,CARTA,"Carotene, alpha",,
-323,,mg,TOCPHA,Vitamin E (alpha-tocopherol),,
+323,15,mg,TOCPHA,Vitamin E (alpha-tocopherol),,
 324,800,IU,VITD_IU,Vitamin D,,
 325,,µg,ERGCAL,Vitamin D2 (ergocalciferol),,
 326,,µg,CHOCAL,Vitamin D3 (cholecalciferol),,
