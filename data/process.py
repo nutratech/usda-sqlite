@@ -69,7 +69,7 @@ with open("rda.csv") as file:
 
 
 def main(args):
-    """ Processes the USDA data to get ready for ntdb """
+    """Processes the USDA data to get ready for ntdb"""
 
     # -----------------
     # Process USDA csv
@@ -98,7 +98,7 @@ def main(args):
 # Handle general file
 # ----------------------
 def process(rows, fname):
-    """ Processes FD_GRP only :O """
+    """Processes FD_GRP only :O"""
 
     with open(output_files[fname], "w+") as file:
         writer = csv.writer(file, lineterminator="\n")
@@ -109,7 +109,7 @@ def process(rows, fname):
 # Nutrient defs
 # -----------------
 def process_nutr_def():
-    """ Process nutr_def """
+    """Process nutr_def"""
 
     def process_main(rows):
         result = []
