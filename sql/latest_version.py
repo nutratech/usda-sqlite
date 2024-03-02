@@ -19,7 +19,9 @@ try:
         reader = csv.reader(_r_file)
         rows = list(reader)
 
-    print(rows[-1][15], end="")
+    # Print latest version
+    print(rows[-1][1], end="")
+
 except Exception as exc:
-    # Failed, so we return empty version
+    # Failed, so we print empty version
     pass
