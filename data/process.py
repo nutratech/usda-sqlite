@@ -1,18 +1,20 @@
-# nt-sqlite, an sqlite3 database for nutratracker clients
-# Copyright (C) 2019-2020  Shane Jaroch <nutratracker@gmail.com>
+"""
+nt-sqlite, an sqlite3 database for nutratracker clients
+Copyright (C) 2019-2020  Shane Jaroch <nutratracker@gmail.com>
 
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
 
 import csv
 import os
@@ -21,10 +23,10 @@ import sys
 
 # Check Python version
 if sys.version_info < (3, 7, 0):
-    ver = ".".join([str(x) for x in sys.version_info[0:3]])
+    _VERSION = ".".join([str(x) for x in sys.version_info[0:3]])
     print("ERROR: this requires Python 3.7.0 or later to run")
-    print("HINT: You're running Python " + ver)
-    exit(1)
+    print("HINT: You're running Python " + _VERSION)
+    sys.exit(1)
 
 # change to script's dir
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -55,20 +57,18 @@ special_interests_dirs = [
 # RDAs
 # --------------------
 rdas = {}
-with open("rda.csv") as file:
+with open("rda.csv", "r", encoding="utf-8") as file:
     reader = csv.DictReader(file)
-    rdas = list(reader)
-    rdas = {int(x["id"]): x for x in rdas}
+    rdas = {int(x["id"]): x for x in list(reader)}
 
 
-"""
 # --------------------
 # main method
 # --------------------
-"""
+# TODO: support args input?
 
 
-def main(args):
+def main():
     """Processes the USDA data to get ready for ntdb"""
 
     # -----------------
@@ -83,9 +83,8 @@ def main(args):
     for fname in output_files:
         print(fname)
         # Open the CSV file
-        with open(fname) as file:
-            reader = csv.reader(file)
-            rows = list(reader)
+        with open(fname, "r", encoding="utf-8") as _file:
+            rows = list(csv.reader(_file))
         #########################
         # Process and write out
         if fname == "SR-Leg_DB/WEIGHT.csv":
@@ -100,8 +99,8 @@ def main(args):
 def process(rows, fname):
     """Processes FD_GRP only :O"""
 
-    with open(output_files[fname], "w+") as file:
-        writer = csv.writer(file, lineterminator="\n")
+    with open(output_files[fname], "w+", encoding="utf-8") as _file:
+        writer = csv.writer(_file, lineterminator="\n")
         writer.writerows(rows)
 
 
@@ -170,9 +169,8 @@ def process_nutr_def():
     # Main USDA files
     main_nutr = "SR-Leg_DB/NUTR_DEF.csv"
     print(main_nutr)
-    with open(main_nutr) as file:
-        reader = csv.DictReader(file)
-        rows = list(reader)
+    with open(main_nutr, "r", encoding="utf-8") as _file:
+        rows = list(csv.DictReader(_file))
         rows = process_main(rows)
         # Add to final solution
         result.extend(rows)
@@ -181,16 +179,15 @@ def process_nutr_def():
     for dir in special_interests_dirs:
         sub_nutr = f"{dir}/NUTR_DEF.csv"
         print(sub_nutr)
-        with open(sub_nutr) as file:
-            reader = csv.DictReader(file)
-            rows = list(reader)
+        with open(sub_nutr, "r", encoding="utf-8") as _file:
+            rows = list(csv.DictReader(_file))
             rows = process_si(rows)
             # Add to final solution
             result.extend(rows)
 
     #########################
     # Write out result
-    with open("nt/nutr_def.csv", "w+") as file:
+    with open("nt/nutr_def.csv", "w+", encoding="utf-8") as _file:
         fieldnames = list(result[0].keys())
         writer = csv.DictWriter(file, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
@@ -201,16 +198,16 @@ def process_nutr_def():
 # Nutrient data
 # -----------------
 def process_nut_data():
-    #
+    """Process nut_data"""
+
     # Prepare the rows
     result = []
 
     # Main USDA files
     main_nutr = "SR-Leg_DB/NUT_DATA.csv"
     print(main_nutr)
-    with open(main_nutr) as file:
-        reader = csv.reader(file)
-        rows = list(reader)
+    with open(main_nutr, "r", encoding="utf-8") as _file:
+        rows = list(csv.reader(_file))
         rows[0].append("cc")  # CC, see: Flav_R03-1.pdf
         # Add to final solution
         for row in rows:
@@ -221,9 +218,8 @@ def process_nut_data():
     for dir in special_interests_dirs:
         sub_nutr = f"{dir}/NUT_DATA.csv"
         print(sub_nutr)
-        with open(sub_nutr) as file:
-            reader = csv.reader(file)
-            rows = list(reader)
+        with open(sub_nutr, "r", encoding="utf-8") as _file:
+            rows = list(csv.reader(_file))
             # Add to final solution
             for row in rows[1:]:
                 _row = [None] * 18
@@ -241,8 +237,8 @@ def process_nut_data():
 
     #########################
     # Write out result
-    with open("nt/nut_data.csv", "w+") as file:
-        writer = csv.writer(file, lineterminator="\n")
+    with open("nt/nut_data.csv", "w+", encoding="utf-8") as _file:
+        writer = csv.writer(_file, lineterminator="\n")
         writer.writerows(result)
 
 
@@ -250,7 +246,8 @@ def process_nut_data():
 # Food description
 # -----------------
 def process_food_des():
-    #
+    """Process food_des"""
+
     # Prepare the rows
     result = []
     food_ids = set()
@@ -258,9 +255,9 @@ def process_food_des():
     # Main USDA files
     main_nutr = "SR-Leg_DB/FOOD_DES.csv"
     print(main_nutr)
-    with open(main_nutr) as file:
-        reader = csv.reader(file)
-        rows = list(reader)
+    with open(main_nutr, "r", encoding="utf-8") as _file:
+        _reader = csv.reader(_file)
+        rows = list(_reader)
         # Add to final solution
         for i, row in enumerate(rows):
             if i > 0:
@@ -271,9 +268,9 @@ def process_food_des():
     for dir in special_interests_dirs:
         sub_nutr = f"{dir}/FOOD_DES.csv"
         print(sub_nutr)
-        with open(sub_nutr) as file:
-            reader = csv.reader(file)
-            rows = list(reader)
+        with open(sub_nutr, "r", encoding="utf-8") as _file:
+            _reader = csv.reader(_file)
+            rows = list(_reader)
             # Add to final solution
             for _row in rows[1:]:
                 food_id = int(_row[0])
@@ -293,8 +290,8 @@ def process_food_des():
 
     #########################
     # Write out result
-    with open("nt/food_des.csv", "w+") as file:
-        writer = csv.writer(file, lineterminator="\n")
+    with open("nt/food_des.csv", "w+", encoding="utf-8") as _file:
+        writer = csv.writer(_file, lineterminator="\n")
         writer.writerows(result)
 
 
@@ -302,7 +299,8 @@ def process_food_des():
 # Data sources
 # -----------------
 def process_data_srcs():
-    #
+    """Process data_srcs"""
+
     # Prepare the rows
     data_src = []
     datsrcln = []
@@ -312,7 +310,9 @@ def process_data_srcs():
     main_datsrcln = "SR-Leg_DB/DATSRCLN.csv"
     print(main_data_src)
     print(main_datsrcln)
-    with open(main_data_src) as file_src, open(main_datsrcln) as file_ln:
+    with open(main_data_src, "r", encoding="utf-8") as file_src, open(
+        main_datsrcln, "r", encoding="utf-8"
+    ) as file_ln:
         reader_src = csv.reader(file_src)
         data_src_rows = list(reader_src)
         reader_ln = csv.reader(file_ln)
@@ -329,9 +329,9 @@ def process_data_srcs():
         # DATA_SRC.csv
         sub_nutr = f"{dir}/DATA_SRC.csv"
         print(sub_nutr)
-        with open(sub_nutr) as file:
-            reader = csv.reader(file)
-            rows = list(reader)
+        with open(sub_nutr, "r", encoding="utf-8") as _file:
+            _reader = csv.reader(_file)
+            rows = list(_reader)
             # Add to final solution
             for _row in rows[1:]:
                 # Special rules
@@ -344,20 +344,20 @@ def process_data_srcs():
         # DATASRCLN.csv
         sub_nutr = f"{dir}/DATSRCLN.csv"
         print(sub_nutr)
-        with open(sub_nutr) as file:
-            reader = csv.reader(file)
-            rows = list(reader)
+        with open(sub_nutr, "r", encoding="utf-8") as _file:
+            _reader = csv.reader(_file)
+            rows = list(_reader)
             # Add to final solution
             for _row in rows[1:]:
                 datsrcln.append(_row)
 
     ##################################################
     # Write serv_desc and serving tables
-    with open("nt/data_src.csv", "w+") as file:
-        writer = csv.writer(file, lineterminator="\n")
+    with open("nt/data_src.csv", "w+", encoding="utf-8") as _file:
+        writer = csv.writer(_file, lineterminator="\n")
         writer.writerows(data_src)
-    with open("nt/datsrcln.csv", "w+") as file:
-        writer = csv.writer(file, lineterminator="\n")
+    with open("nt/datsrcln.csv", "w+", encoding="utf-8") as _file:
+        writer = csv.writer(_file, lineterminator="\n")
         writer.writerows(datsrcln)
 
 
@@ -365,6 +365,7 @@ def process_data_srcs():
 # Weight
 # -----------------
 def process_weight(rows, fname):
+    """Process weight"""
 
     # Unique qualifiers
     msre_ids = {}
@@ -406,15 +407,16 @@ def process_weight(rows, fname):
 
     ##################################################
     # Write serv_desc and serving tables
-    with open("nt/serv_desc.csv", "w+") as file:
-        writer = csv.writer(file, lineterminator="\n")
+    with open("nt/serv_desc.csv", "w+", encoding="utf-8") as _file:
+        writer = csv.writer(_file, lineterminator="\n")
         writer.writerows(serv_desc)
-    with open("nt/serving.csv", "w+") as file:
-        writer = csv.writer(file, lineterminator="\n")
+    with open("nt/serving.csv", "w+", encoding="utf-8") as _file:
+        writer = csv.writer(_file, lineterminator="\n")
         writer.writerows(serving)
 
 
 #
 # Make script executable
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    # main(sys.argv[1:])
+    main()
