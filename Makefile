@@ -27,21 +27,14 @@ init:	## Install requirements (w/o --frozen-lockfile)
 
 
 # ---------------------------------------
-# Run, lint & format
+# Format
 # ---------------------------------------
-
-.PHONY: run
-run:
-	pnpm dev
 
 .PHONY: format
 format:	## format SQL with pg_format
-	./sql/format.sh
-
-.PHONY: lint
-lint:	## pnpm lint && pnpm check
-	pnpm lint
-	pnpm check
+	# TODO: what about import.sql?  It gets formatted too ugly
+	pg_format -L -s 2 -w 100 sql/tables.sql >sql/tables.fmt.sql
+	mv sql/tables.fmt.sql sql/tables.sql\
 
 
 
@@ -49,28 +42,27 @@ lint:	## pnpm lint && pnpm check
 # Build & install
 # ---------------------------------------
 
-APP_VERSION ?= v$(shell jq -r .version package.json)
-APP_BUNDLE ?= build-${APP_VERSION}.tar.xz
-APP_RELEASE_DATE ?= $(shell date --iso)
+DB_VERSION ?= $(shell python3 sql/latest_version.py)
+DB_FILE ?= sql/dist/usda.sqlite3-${DB_VERSION}.tar.xz
 
 .PHONY: build
 build: clean
 build:	## Build the release
-	./sql/build.sh
-	du -h ${APP_BUNDLE}
+	./sql/build.sh ${DB_VERSION}
+	du -h ${DB_FILE}
 
 .PHONY: deploy/upload
 deploy/upload:	## Upload to GitHub releases
-	test -n "${APP_VERSION}"
-	test -f ${APP_BUNDLE}
-	gh release create ${APP_VERSION} --generate-notes
-	gh release upload ${APP_VERSION} ${APP_BUNDLE}
+	test -n "${DB_VERSION}"
+	test -f ${DB_FILE}
+	gh release create v${DB_VERSION} --generate-notes
+	gh release upload v${DB_VERSION} ${DB_FILE}
 
 .PHONY: deploy/delete
 deploy/delete:
-	gh release delete ${APP_VERSION}
-	git push origin --delete ${APP_VERSION}
-	- git tag -d ${APP_VERSION}
+	gh release delete v${DB_VERSION}
+	git push origin --delete v${DB_VERSION}
+	- git tag -d v${DB_VERSION}
 
 
 REMOTE_HEAD ?= origin/master
@@ -82,22 +74,16 @@ _check-git-up-to-date:
 	# Check that we are in sync with ${REMOTE_HEAD}
 	git diff --quiet ${REMOTE_HEAD}
 
-PROJECT_NAME ?= web
-DEPLOY_URL ?= https://nutra.tk/
+PROJECT_NAME ?= usda-sqlite
 
 .PHONY: deploy/install-prod
 deploy/install-prod: _check-git-up-to-date
 deploy/install-prod:	## Install (on prod VPS)
 	# Check the version string was extracted from package.json
-	test -n "${APP_VERSION}"
-	# Download ${APP_VERSION}
-	curl -sSLO https://github.com/nutratech/${PROJECT_NAME}/releases/download/${APP_VERSION}/${APP_BUNDLE}
-	tar xf ${APP_BUNDLE}
-	rm -f ${APP_BUNDLE}
-	# Copy in place
-	rm -rf /var/www/app/* && mv build/* /var/www/app/
-	# Test live URL
-	curl -fI ${DEPLOY_URL}
+	test -n "${DB_VERSION}"
+	# Download ${DB_VERSION}
+	curl -sSLO https://github.com/nutratech/${PROJECT_NAME}/releases/download/${DB_VERSION}/${DB_FILE}
+	tar xf ${DB_FILE}
 
 
 
@@ -105,16 +91,11 @@ deploy/install-prod:	## Install (on prod VPS)
 # Clean & extras
 # ---------------------------------------
 
-CLEAN_LOCS_ROOT ?= *.tar.xz build/
-
 .PHONY: clean
 clean:	## Clean up leftover bits and stuff from build
-	rm -rf ${CLEAN_LOCS_ROOT}
-
-.PHONY: purge
-purge:	## Purge package-lock.json && node_modules/
-	rm -rf package-lock.json pnpm-lock.yaml node_modules/
+	rm -f sql/*.sqlite
+	rm -f sql/*.sqlite3
 
 .PHONY: extras/cloc
 extras/cloc:
-	cloc HEAD --exclude-dir=svelte.config.js,pnpm-lock.yaml,package-lock.json
+	cloc HEAD --exclude-dir=usda.svg
