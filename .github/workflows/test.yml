@@ -19,29 +19,14 @@ jobs:
       - name: Extras / Count Lines of Source Code
         run: make extras/cloc
 
-      - name: Install requirements
-        run: make init
-
-      # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      # Build [Dev] (and Deploy)
-      # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-      - name: Build (dev)
-        if: github.ref == 'refs/heads/dev'
-        run: pnpm build:dev
-
-      - name: Deploy (dev) [Copy static files over]
-        if: github.ref == 'refs/heads/dev'
-        run: rm -rf /var/www/app/* && mv build/* /var/www/app/
-
       # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       # Lint
       # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       - name: Lint
-        run: pnpm lint
+        run: make format
 
       - name: Check
-        run: pnpm check
+        run: git diff HEAD --quiet
 
       # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       # Build [Prod] (and Upload binary)
@@ -52,7 +37,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          RELEASE_TAG=v$(jq -r .version package.json)
+          RELEASE_TAG=v$(python3 sql/latest_version.py)
           echo RELEASE_TAG=$RELEASE_TAG
           test -n "$RELEASE_TAG"
           # Test that github-cli is working
