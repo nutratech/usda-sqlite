@@ -9,3 +9,4 @@ id,version,created,notes
 8,0.0.7,Wed 30 Sep 2020 02:03:41 AM EDT,fixing (some) missing FK constraints
 9,0.0.8,Sat Mar 6 11:33:05 2021 -0500,"speed up nutrients avg, with overview"
 10,0.0.9,Sat Feb 24 12:06:24 PM EST 2024,"add Vit E value, std_dev on nutrients_overview"
+11,0.0.10,Sat Mar  2 11:13:12 AM EST 2024,update DB version to 0.0.10 (sqlite3 extension)

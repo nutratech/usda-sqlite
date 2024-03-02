@@ -16,6 +16,7 @@
 # Database files, csv, intermediates
 *.db
 *.sqlite
+*.sqlite3
 *.csv
 tmp/
 

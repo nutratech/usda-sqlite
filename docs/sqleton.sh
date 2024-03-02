@@ -4,4 +4,4 @@
 cd "$(dirname "$0")"
 cd ../sql
 
-sqleton -o ../docs/usda.svg usda.sqlite
+sqleton -o ../docs/usda.svg usda.sqlite3

@@ -58,7 +58,7 @@ Building the database
     ./build.sh X.X.X  # e.g. 0.0.8
 
 
-5. Verify the tables (again inside the SQL shell :code:`sqlite3 usda.sqlite`),
+5. Verify the tables (again inside the SQL shell :code:`sqlite3 usda.sqlite3`),
 
 .. code-block:: sql
 
