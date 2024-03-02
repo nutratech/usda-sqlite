@@ -1,0 +1,75 @@
+---
+name: ci
+
+'on':
+  push:
+    branches:
+      - '**'
+
+permissions:
+  contents: write
+
+jobs:
+  ci:
+    runs-on: [self-hosted, dev]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extras / Count Lines of Source Code
+        run: make extras/cloc
+
+      - name: Install requirements
+        run: make init
+
+      # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      # Build [Dev] (and Deploy)
+      # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      - name: Build (dev)
+        if: github.ref == 'refs/heads/dev'
+        run: pnpm build:dev
+
+      - name: Deploy (dev) [Copy static files over]
+        if: github.ref == 'refs/heads/dev'
+        run: rm -rf /var/www/app/* && mv build/* /var/www/app/
+
+      # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      # Lint
+      # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      - name: Lint
+        run: pnpm lint
+
+      - name: Check
+        run: pnpm check
+
+      # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      # Build [Prod] (and Upload binary)
+      # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      - name: Check release version
+        id: check-release-version
+        if: github.ref == 'refs/heads/master'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RELEASE_TAG=v$(jq -r .version package.json)
+          echo RELEASE_TAG=$RELEASE_TAG
+          test -n "$RELEASE_TAG"
+          # Test that github-cli is working
+          gh --version
+          gh release list -L 1
+          # TODO: enhance this to be: if release_tag > current_prod_tag, deploy
+          gh release view $RELEASE_TAG || echo "PUBLISH=1" >> "$GITHUB_OUTPUT"
+
+      # yamllint disable rule:line-length
+      - name: Build (production release)
+        if: github.ref == 'refs/heads/master' && steps.check-release-version.outputs.PUBLISH
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: set -o pipefail; make build
+
+      - name: Upload artifacts (production release)
+        if: github.ref == 'refs/heads/master' && steps.check-release-version.outputs.PUBLISH
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: set -o pipefail; make deploy/upload
