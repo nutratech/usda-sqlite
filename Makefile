@@ -35,8 +35,8 @@ run:
 	pnpm dev
 
 .PHONY: format
-format:	## pnpm format
-	pnpm format
+format:	## format SQL with pg_format
+	./sql/format.sh
 
 .PHONY: lint
 lint:	## pnpm lint && pnpm check
