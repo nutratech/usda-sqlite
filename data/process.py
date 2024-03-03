@@ -189,7 +189,7 @@ def process_nutr_def():
     # Write out result
     with open("nt/nutr_def.csv", "w+", encoding="utf-8") as _file:
         fieldnames = list(result[0].keys())
-        writer = csv.DictWriter(file, fieldnames=fieldnames, lineterminator="\n")
+        writer = csv.DictWriter(_file, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(result)
 
