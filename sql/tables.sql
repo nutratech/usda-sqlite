@@ -13,8 +13,11 @@
 --
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-CREATE TABLE version( id integer PRIMARY KEY AUTOINCREMENT, version text NOT NULL, created timestamp DEFAULT CURRENT_TIMESTAMP, notes text
+CREATE TABLE version (
+  id integer PRIMARY KEY AUTOINCREMENT,
+  version text NOT NULL,
+  created timestamp DEFAULT CURRENT_TIMESTAMP,
+  notes text
 );
 
 CREATE TABLE nutr_def (
@@ -44,10 +47,10 @@ CREATE TABLE food_des (
   ref_desc text,
   refuse int,
   sci_name text,
-  n_factor FLOAT,
-  pro_factor FLOAT,
-  fat_factor FLOAT,
-  cho_factor FLOAT,
+  n_factor float,
+  pro_factor float,
+  fat_factor float,
+  cho_factor float,
   FOREIGN KEY (fdgrp_id) REFERENCES fdgrp (id)
 );
 
@@ -143,4 +146,3 @@ CREATE TABLE serving (
   FOREIGN KEY (food_id) REFERENCES food_des (id),
   FOREIGN KEY (msre_id) REFERENCES serv_desc (id)
 );
-
